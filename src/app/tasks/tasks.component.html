@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SKILL-MAP</title>
+</head>
+<body class="mainbody">
+    <div class="sidenavbar">
+        <h1>SkillMap</h1>
+        <div class="optionsdiv">
+            <div class="option-btn" 
+                [ngClass]="{'selected-option': selectedOption === 'dashboard'}" 
+                (click)="navigateTo('dashboard')">
+                Dashboard
+            </div>
+            <div class="option-btn" 
+                [ngClass]="{'selected-option': selectedOption === 'project'}" 
+                (click)="navigateTo('project')">
+                Projects
+            </div>
+            <div class="option-btn" 
+                [ngClass]="{'selected-option': selectedOption === 'teams'}" 
+                (click)="navigateTo('teams')">
+                Teams
+            </div>
+        </div>
+
+        <div class="optionsdiv2">
+            <!-- <div class="option-btn2" 
+                [ngClass]="{'selected-option2': selectedOption === 'settings'}" 
+                (click)="navigateTo('settings')">
+                Settings
+            </div> -->
+            <div class="option-btn logout-btn" 
+                [ngClass]="{'selected-option': selectedOption === 'logout'}" 
+                (click)="logout()">
+                Logout
+            </div>
+        </div>
+    </div>
+
+    <div class="taskdetails-container">
+        <div *ngFor="let task of project?.tasks" class="taskdetails">
+            <h2>{{ task.title }}</h2>
+            <p style="font-family: 'Manrope'; font-weight: 400; font-size: 19px;">{{task.description}}</p>
+            <!-- <p>Assigned Member: {{ task.assignedmember }}</p> -->
+            <p>Due Date: {{ task.duedate | date }}</p>
+            <p><strong>Suggested Designations:</strong></p>
+            <ul>
+                <li *ngFor="let des of getDesignations(task.designation)">
+                    {{ des }}
+                </li>
+            </ul>
+        
+            <div class="update-status">
+                <!-- <button (click)="toggleDropdown(task)" class="update-status-button">Update Status</button> -->
+                <div *ngIf="task.showDropdown" class="dropdown-menu">
+                    <div (click)="updateTaskStatus(task, 'In Progress')">In Progress</div>
+                    <div (click)="updateTaskStatus(task, 'Completed')">Completed</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

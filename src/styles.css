@@ -1,0 +1,17 @@
+:root {
+    --background-color: #ffffff;
+    --text-color: #000000;
+    --card-background-color: #f9f9f9;
+  }
+  
+  .dark-mode {
+    --background-color: #121212;
+    --text-color: #ffffff;
+    --card-background-color: #1e1e1e;
+  }
+  
+  body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+  }
+  

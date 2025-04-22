@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body >
+  <div class="mainbody">
+    <div class="sidenavbar">
+        <h1>SkillMap</h1>
+
+        <div class="optionsdiv">
+          <div class="option-btn" [ngClass]="{ 'selected-option': selectedOption === 'dashboard' }" (click)="navigateTo('dashboard')">Dashboard</div>
+          <div class="option-btn" [ngClass]="{ 'selected-option': selectedOption === 'projects' }" (click)="navigateTo('project')">Projects</div>
+          <div class="option-btn" [ngClass]="{ 'selected-option': selectedOption === 'teams' }" (click)="navigateTo('teams')">Teams</div>
+        </div>
+        <div class="optionsdiv2">
+          <div class="option-btn logout-btn" [ngClass]="{ 'selected-option': selectedOption === 'logout' }" (click)="logout()">Logout</div>
+        </div>
+    
+        <!-- Add Project Button -->
+        <div class="addproject" (click)="openAddProjectForm()">
+          <div class="plus">+</div>
+          <div class="addprojectbutton">Add New Project</div>
+        </div>
+    </div>
+  
+    <!-- Add Project Modal -->
+    <div *ngIf="isAddProjectModalOpen" class="add-project-modal">
+      <div class="modal-content">
+        <h2>Add New Project</h2>
+        <form (ngSubmit)="addProject()">
+          <div class="form-group">
+            <label for="title">Project Title:</label>
+            <input type="text" id="title" [(ngModel)]="newProject.name" name="title" required />
+            <div *ngIf="nameError" class="error-message">Project title cannot be a number.</div>
+          </div>
+    
+          <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea id="description" [(ngModel)]="newProject.description" name="description" required></textarea>
+            <div *ngIf="descriptionError" class="error-message">Description cannot be a number.</div>
+          </div>
+    
+          <div class="form-group">
+            <label for="type">Project Type:</label>
+            <input type="text" id="type" [(ngModel)]="newProject.type" name="type" required />
+            <div *ngIf="typeError" class="error-message">Type cannot be a number.</div>
+          </div>
+    
+          <div class="form-group">
+            <label for="startdate">Start Date:</label>
+            <input type="date" id="startdate" [(ngModel)]="newProject.startdate" name="startdate" required (change)="validateDates()" />
+        </div>
+        
+        <div class="form-group">
+            <label for="enddate">End Date:</label>
+            <input type="date" id="enddate" [(ngModel)]="newProject.enddate" name="enddate" required (change)="validateDates()" />
+        </div>
+        
+        <!-- Display error message -->
+        <div *ngIf="dateError" class="error-message">
+            {{ dateError }}
+        </div>
+        
+        <div class="button-group">
+            <button type="submit" class="btn btn-primary" [disabled]="dateError">Add Project</button>
+            <button type="button" class="btn btn-secondary" (click)="closeAddProjectForm()">Cancel</button>
+        </div>
+        
+        </form>
+      </div>
+    </div>
+    
+    
+    
+    <div class="section-header">
+      <div class="heading">
+        <h1 style="color: rgb(0, 0, 0); text-align: center;">Company Projects</h1>
+      </div>
+      <div class="navbar">
+        <div class="tab selected"><b style="color:#00ADB5;">Projects</b></div>
+        <!-- <div class="tab">Timeline</div>
+        <div class="tab">Calendar</div>
+        <div class="tab">Files</div> -->
+      </div>
+  
+      <div class="projectscontainer">
+        <div *ngFor="let project of projects" class="projectcard" (click)="viewProjectDetails(project)">
+          <h2 style="color: rgb(0, 0, 0); text-align: center;">{{ project.name }}</h2>
+          <pre style="color: rgb(0, 0, 0); text-align:justify;">{{ project.description }}</pre>
+          <div style="color: rgb(0, 0, 0);" class="projecttype">{{ project.type }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+
+  

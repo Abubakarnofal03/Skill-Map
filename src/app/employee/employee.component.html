@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Dashboard</title>
+</head>
+<body>
+    <!-- Loading indicator -->
+    <div *ngIf="isLoading || isUpdating" class="loading-overlay">
+        <div class="spinner"></div>
+        <p>{{ isUpdating ? 'Updating task...' : 'Loading your tasks...' }}</p>
+    </div>
+
+    <div class="sidenavbar">
+        <h1>SkillMap</h1>
+        <div class="optionsdiv">
+            <div class="option-btn" 
+                [ngClass]="{'selected-option': selectedOption === 'employee'}" 
+                (click)="navigateTo('employee')">
+                Dashboard
+            </div>
+        </div>
+
+        <div class="optionsdiv2">
+            <div class="option-btn2" 
+                [ngClass]="{'selected-option2': selectedOption === 'settings'}" 
+                (click)="navigateTo('settings')">
+                Settings
+            </div>
+            <div class="option-btn logout-btn" 
+                [ngClass]="{'selected-option': selectedOption === 'logout'}" 
+                (click)="logout()">
+                Logout
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>Hi, {{ employeeName }}</h1>
+            <div class="employee-info">
+                <p><strong>Skill:</strong> {{ employeeSkill }}</p>
+                <p><strong>Status:</strong> {{ employeeStatus }}</p>
+            </div>
+        </header>
+        
+        <div class="content">
+            <div class="stats">
+                <div class="active-projects">
+                    <h2>{{ activeTasksCount }}</h2>
+                    <p>Active tasks</p>
+                </div>
+                <div class="completed-projects">
+                    <h2>{{ completedTasksCount }}</h2>
+                    <p>Completed tasks</p>
+                </div>
+            </div>
+            
+            <!-- Active Tasks Section -->
+            <div class="active-tasks">
+                <h2>My Tasks</h2>
+                
+                <div *ngIf="projectsWithTasks.length === 0" class="no-data">
+                    <p>No tasks assigned yet.</p>
+                </div>
+                
+                <div *ngFor="let project of projectsWithTasks" class="project-section">
+                    <h3 class="project-title">{{ project.name }}</h3>
+                    
+                    <div *ngFor="let task of project.tasks" class="task">
+                        <div class="task-header">
+                            <h4>{{ task.title }}</h4>
+                            <span class="task-status" [ngClass]="task.status.toLowerCase()">
+                                {{ task.status }}
+                            </span>
+                        </div>
+                        
+                        <p class="task-description">{{ getTaskType(task.description, task.tasktype) }}</p>
+                        
+                        <div class="task-details">
+                            <p><strong>Due:</strong> {{ formatDate(task.duedate) }}</p>
+                            <p><strong>Level:</strong> {{ task.designation }}</p>
+                        </div>
+                        
+                        <div class="task-actions" *ngIf="task.status !== 'Completed'">
+                            <button class="complete-btn" (click)="updateTaskStatus(task.id, 'Completed')">
+                                Mark as Completed
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Upcoming Deadlines Section -->
+            <div class="upcoming-deadlines">
+                <h2>Upcoming Deadlines</h2>
+                
+                <div *ngIf="upcomingDeadlines.length === 0" class="no-data">
+                    <p>No upcoming deadlines.</p>
+                </div>
+                
+                <div *ngFor="let task of upcomingDeadlines" class="deadline">
+                    <div class="deadline-info">
+                        <h4>{{ task.title }}</h4>
+                        <p>{{ getTaskType(task.description, task.tasktype) }}</p>
+                        <p class="deadline-date">Due: {{ formatDate(task.duedate) }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="user-status">
+            <p>Current Status: <strong>{{ employeeStatus }}</strong></p>
+            <button (click)="applyForLeave()" [disabled]="employeeStatus === 'on_leave'">
+                Apply for Leave
+            </button>
+        </div>
+    </div>
+</body>
+</html>

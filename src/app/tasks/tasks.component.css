@@ -1,0 +1,177 @@
+/* Main Body */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #F5F7FA;
+}
+
+/* Sidebar */
+.sidenavbar {
+    background-color: #1A1A2E;
+    height: 100vh;
+    width: 200px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 20px;
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.sidenavbar h1 {
+    color: #00ADB5;
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.optionsdiv, .optionsdiv2 {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.option-btn, .option-btn2 {
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: left;
+    color: #EAEAEA;
+    background: transparent;
+    transition: 0.3s ease;
+    cursor: pointer;
+}
+
+.option-btn:hover, .option-btn2:hover {
+    background-color: rgba(0, 173, 181, 0.3);
+}
+
+.selected-option, .selected-option2 {
+    background-color: #00ADB5;
+    color: white;
+    font-weight: bold;
+    /* box-shadow: #00ADB5; */
+}
+
+/* Logout Button */
+.logout-btn {
+    color: #FF4C4C;
+    font-weight: bold;
+}
+
+.logout-btn:hover {
+    background-color: rgba(255, 76, 76, 0.3);
+}
+
+/* Task Details Container */
+.taskdetails-container {
+    display: flex;
+    flex-wrap: wrap; /* Prevents overflow */
+    gap: 20px;
+    margin-left: 30vh;
+    padding: 20px;
+    justify-content: flex-start;
+    width: calc(100% - 32vh);
+
+}
+
+/* Task Details Card */
+.taskdetails {
+    width: 46vh;
+    height: 53vh;
+    padding: 20px;
+    background: rgb(26, 10, 44);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 20px;
+    border: 1px solid #DDD;
+    display: flex;
+    flex-direction: column;
+    overflow-wrap: break-word; /* Ensures text wraps */
+    word-break: break-word;
+    background-image: linear-gradient(180deg, #00ADB5, #1A1A2E);
+}
+
+.taskdetails h2 {
+    color: #d2d2d2;
+    font-weight: bold;
+    font-size: 22px;
+    margin-bottom: 10px;
+}
+
+.taskdetails p {
+    font-size: 1rem;
+    color: #d2d2d2;
+    margin: 5px 0;
+}
+.taskdetails li{
+    color:white;
+}
+/* Update Status Button */
+.update-status {
+    position:absolute;
+    margin-top: 24%;
+}
+
+.update-status-button {
+    width:310%;
+    padding: 10px;
+    background: #a59696;
+    border: none;
+    border-radius: 30px;
+    font-size: 15px;
+    color: #000000;
+    cursor: pointer;
+}
+
+.update-status-button:hover {
+    background-color: #f0f0f0;
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    width: 100%;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    z-index: 10;
+    text-align: center;
+}
+
+.dropdown-menu div {
+    padding: 10px 0;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.dropdown-menu div:hover {
+    background-color: #f0f0f0;
+}
+
+/* Responsiveness */
+@media screen and (max-width: 768px) {
+    .sidenavbar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+
+    .taskdetails-container {
+        flex-direction: column;
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .taskdetails {
+        width: 90%;
+        margin: 10px auto;
+    }
+
+    .optionsdiv, .optionsdiv2 {
+        position: relative;
+        margin-top: 20px;
+    }
+}

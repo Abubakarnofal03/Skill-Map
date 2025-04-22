@@ -1,0 +1,173 @@
+/* General Styling */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #F5F7FA;
+}
+
+/* Sidebar */
+.sidenavbar {
+    background-color: #1A1A2E;
+    height: 100vh;
+    width: 200px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 20px;
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.sidenavbar h1 {
+    color: #00ADB5;
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.optionsdiv, .optionsdiv2 {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.option-btn, .option-btn2 {
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: left;
+    color: #EAEAEA;
+    background: transparent;
+    transition: 0.3s ease;
+    cursor: pointer;
+}
+
+.option-btn:hover, .option-btn2:hover {
+    background-color: rgba(0, 173, 181, 0.3);
+}
+
+.selected-option, .selected-option2 {
+    background-color: #00ADB5;
+    color: white;
+    font-weight: bold;
+    /* box-shadow: #00ADB5; */
+}
+
+/* Logout Button */
+.logout-btn {
+    color: #FF4C4C;
+    font-weight: bold;
+}
+
+.logout-btn:hover {
+    background-color: rgba(255, 76, 76, 0.3);
+}
+
+/* Main Dashboard */
+.maindiv {
+    margin-left: 280px;
+    padding: 30px;
+
+}
+
+.maindiv h1 {
+    font-size:xx-large;
+    color: #1A1A2E;
+    margin-bottom: 20px;
+}
+
+/* Search Bar */
+.searchbar {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 50%;
+    padding: 10px;
+    margin-bottom: 30px;
+}
+
+.searchbar input {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    background-color: white;
+}
+
+/* Project Summary */
+.projectnumbers {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.project-box {
+    background-color: #00ADB5;
+    padding: 20px;
+    border-radius: 10px;
+    width: 45%;
+    text-align: center;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Employee Table */
+.employeesdetails table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.employeesdetails th {
+    background-color: #00ADB5;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+
+.employeesdetails td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Employee Cards */
+.employee-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.employee-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 15px;
+    width: 200px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.employee-card h4 {
+    margin: 10px 0 5px;
+}
+
+.employee-card p {
+    color: #777;
+}
+
+
+.free-btn {
+    background-color: #4caf50;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }

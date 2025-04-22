@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
+
+    <title>SKILL-MAP</title>
+</head>
+<body class="mainbody">
+    <h1 class="headingdiv"> SKILL MAP !</h1>
+    <p class="dashes">- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</p>
+    <div class="inputbox2">
+        <h1 class="title">Login</h1>
+        <p class="subtitle">Glad you're back!</p>
+        
+       
+        <div class="input-container">
+            <input type="text" placeholder="Username" [(ngModel)]="Username" class="input-field">
+        </div>
+        <div class="input-container">
+            <input type="password" placeholder="Password" [(ngModel)]="Password" class="input-field">
+        </div>
+        
+        <button class="button" (click)="checkcredentials()">Login</button>
+        
+        
+        <!-- <button class="button" (click)="home()">Back to Home</button> -->
+        
+        <!-- Display error message when credentials are incorrect -->
+        <div style="color: white;"  *ngIf="loginError" class="error-message">
+            {{ loginError }}
+        </div>
+      
+        <p style="color: rgba(255, 255, 255, 0.386);">___________________________________________________</p>
+        
+        
+        <div class="footer-links">
+            <button class="text-button" onclick="alert('Terms & Conditions clicked!')">Terms & Conditions</button>
+            <button class="text-button" onclick="alert('Support clicked!')">Support</button>
+            <button class="text-button" onclick="alert('Customer Care clicked!')">Customer Care</button>
+        </div>
+    </div>
+    </body>
+</html>

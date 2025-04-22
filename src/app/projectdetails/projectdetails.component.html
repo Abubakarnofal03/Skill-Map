@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SKILL-MAP</title>
+</head>
+<body class="mainbody">
+    <!-- Loading Overlay -->
+    <div *ngIf="isLoading" class="loading-overlay">
+        <div class="loading-spinner"></div>
+        <p class="loading-message">{{ loadingMessage }}</p>
+    </div>
+
+    <div class="sidenavbar">
+        <h1>SkillMap</h1>
+        <div class="optionsdiv">
+            <div class="option-btn" 
+                [ngClass]="{'selected-option': selectedOption === 'dashboard'}" 
+                (click)="navigateTo('dashboard')">
+                Dashboard
+            </div>
+            <div class="option-btn" 
+                [ngClass]="{'selected-option': selectedOption === 'project'}" 
+                (click)="navigateTo('project')">
+                Projects
+            </div>
+            <div class="option-btn" 
+                [ngClass]="{'selected-option': selectedOption === 'teams'}" 
+                (click)="navigateTo('teams')">
+                Teams
+            </div>
+        </div>
+
+        <div class="optionsdiv2">
+            <div class="option-btn logout-btn" 
+                [ngClass]="{'selected-option': selectedOption === 'logout'}" 
+                (click)="logout()">
+                Logout
+            </div>
+        </div>
+    </div>
+
+    <div class="pdheader">
+        <h1 style="color: black;">Project Title: {{ project.name }}</h1>
+        <pre style="color: black;">Description: {{ project.description }}</pre>
+        <pre style="color: black;">Start Date: {{ project.startdate | date: 'yyyy-MM-dd' }}</pre>
+        <pre style="color: black;">End Date: {{ project.enddate | date: 'yyyy-MM-dd' }}</pre>
+        <pre style="color: black;">Status: {{ project.status }}</pre>
+    </div>
+    
+    <div class="tasks">
+        <button (click)="navigateToTasks()">Tasks ></button>
+
+        <!-- Segregate button with disabled state -->
+        <button 
+            (click)="sagregateTasks()" 
+            [disabled]="segregationDone" 
+            [ngClass]="{ 'disabled-button': segregationDone }">
+            Segregate Tasks
+        </button>
+    </div>
+      
+    <div class="tasksconatainer">
+        <div *ngFor="let task of project?.tasks" class="taskdetails">
+            <pre style="color: black;">Task: {{ task.title }}</pre>
+            <pre style="color: black;">Status: {{ task.status }}</pre>
+        </div>
+    </div>
+</body>
+</html>

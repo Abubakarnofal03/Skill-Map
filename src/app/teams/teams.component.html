@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SKILL-MAP</title>
+</head>
+<body class="mainbody">
+    <div class="sidenavbar">
+        <h1>SkillMap</h1>
+        <div class="optionsdiv">
+            <div class="option-btn" 
+                [ngClass]="{'selected-option': selectedOption === 'dashboard'}" 
+                (click)="navigateTo('dashboard')">
+                Dashboard
+            </div>
+            <div class="option-btn" 
+                [ngClass]="{'selected-option': selectedOption === 'project'}" 
+                (click)="navigateTo('project')">
+                Projects
+            </div>
+            <div class="option-btn" 
+                [ngClass]="{'selected-option': selectedOption === 'teams'}" 
+                (click)="navigateTo('teams')">
+                Teams
+            </div>
+        </div>
+
+        <div class="optionsdiv2">
+            <div class="option-btn logout-btn" 
+                [ngClass]="{'selected-option': selectedOption === 'logout'}" 
+                (click)="logout()">
+                Logout
+            </div>
+        </div>
+    </div>
+    
+    <div class="content">
+        <h2>Projects</h2>
+        <ul class="project-list">
+            <li *ngFor="let project of projects" 
+                (click)="selectProject(project)" 
+                [class.selected-project]="project === selectedProject">
+                {{ project.name }}
+            </li>
+        </ul>
+    
+        <div class="team-members" *ngIf="selectedProject">
+            <h3>Team Members for {{ selectedProject.name }}</h3>
+            
+            <button class="form-team-btn" 
+                    (click)="formTeam()" 
+                    [disabled]="!selectedProject || isFormingTeam">
+                {{ isFormingTeam ? 'Forming Team...' : 'Form Team' }}
+            </button>
+
+            <div class="error-message" *ngIf="errorMessage">
+                {{ errorMessage }}
+            </div>
+
+            <div class="listofmembers" *ngIf="selectedProject.teammembers?.length; else noMembers">
+                <div class="member-card" *ngFor="let member of selectedProject.teammembers">
+                    <div class="member-image"></div>
+                    <div class="member-info">
+                        <div class="employee-name">{{ member.name }}</div>
+                        <div class="role">{{ member.skill }}</div>
+                        <div class="status">Status: {{ member.status }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <ng-template #noMembers>
+                <p>No team members assigned to this project.</p>
+            </ng-template>
+
+            
+        </div>
+    </div>
+</body>
+</html>

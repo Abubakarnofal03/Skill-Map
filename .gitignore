@@ -1,0 +1,18 @@
+# Angular build
+dist/
+node_modules/
+
+# Python
+*.pyc
+__pycache__/
+env/
+venv/
+*.log
+
+# Django static/media
+staticfiles/
+media/
+
+# Vercel/Render local
+.vercel/
+.env

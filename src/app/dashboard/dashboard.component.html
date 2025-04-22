@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkillMap Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="mainbody">
+  <div class="sidenavbar">
+    <h1>SkillMap</h1>
+    <div class="optionsdiv">
+      <div class="option-btn" [ngClass]="{ 'selected-option': selectedOption === 'dashboard' }" (click)="navigateTo('dashboard')">Dashboard</div>
+      <div class="option-btn" [ngClass]="{ 'selected-option': selectedOption === 'projects' }" (click)="navigateTo('project')">Projects</div>
+      <div class="option-btn" [ngClass]="{ 'selected-option': selectedOption === 'teams' }" (click)="navigateTo('teams')">Teams</div>
+    </div>
+    <div class="optionsdiv2">
+      <div class="option-btn logout-btn" (click)="logout()">Logout</div>
+    </div>
+  </div>
+
+  <div class="maindiv">
+    <h1>Company Dashboard</h1>
+
+    <div class="searchbar">
+      <input
+        type="text"
+        placeholder="Search employees, projects"
+        [(ngModel)]="searchQuery"
+        (input)="filterEmployees()" />
+    </div>
+
+    <div class="projectnumbers">
+      <div class="project-box">Total running projects: {{ totalProjects }} </div>
+      <div class="project-box">Total employees: {{ totalEmployees }} Employees</div>
+    </div>
+
+    <h2>All Employees</h2>
+    <div class="employeesdetails">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Status</th>
+           
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let employee of filteredEmployees">
+            <td>{{ employee.username }}</td>
+            <td>{{ employee.status }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</body>
+</html>

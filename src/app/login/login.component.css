@@ -1,0 +1,139 @@
+.headingdiv {
+    font-size: 6em;
+    color: white;
+    font-family: 'Noto Sans', sans-serif;
+    position: absolute;
+    top: 40%;
+    left: 20px; 
+    transform: translateY(-50%);
+}
+
+.mainbody {
+    background: linear-gradient(to bottom, #0F0F0F, #2D0644);
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: 'Noto Sans', sans-serif;
+}
+.dashes {
+    font-size: 4em;
+    color: rgba(255, 255, 255, 0.39);
+    font-family: 'Noto Sans', sans-serif;
+    position: absolute;
+    top: 52%; 
+    left: 20px;
+    transform: translateY(-50%);
+}
+
+.inputbox {
+    text-align: center;
+    border: 2px solid rgba(255, 255, 255, 0.319); 
+    padding: 20px;
+    border-radius: 3%;
+    position: absolute;
+    top: 50%; 
+    right: 40px;
+    transform: translateY(-50%);
+    width: 370px; 
+    height: auto; 
+    max-height: 80%; 
+    backdrop-filter: blur(10px);
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3), 0px 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.inputbox h1 {
+    padding-top: 60px;
+    color: white;
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 2em;
+    margin: 0;
+    padding-bottom: 30px;
+}
+
+.button {
+    background: linear-gradient(90.57deg, #628EFF 9.91%, #8740CD 53.29%, #580475 91.56%);
+    color: white; 
+    border: none; 
+    border-radius: 12px; 
+    padding: 10px 20px; 
+    font-size: 20px; 
+    cursor: pointer; 
+    width: 100%; 
+    transition: background-color 0.3s; 
+}
+
+.button:hover {
+    background: linear-gradient(90.57deg, #4B75B9 9.91%, #6B2E9A 53.29%, #3B0272 91.56%); 
+}
+
+.text-button {
+    color: white;
+    cursor: pointer;
+    font-size: 0.9em;
+    padding: 0;
+    border: none;
+    outline: none;
+    transition: color 0.3s;
+    background: none;
+}
+
+.text-button:hover {
+    color: #628EFF; 
+    text-decoration: underline; /* Add underline on hover for clarity */
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .headingdiv {
+        font-size: 4em; /* Adjust heading size for smaller screens */
+    }
+
+    .dashes {
+        font-size: 2.5em; /* Adjust dashes size */
+        left: 10px; /* Center horizontally */
+    }
+
+    .inputbox {
+        width: 90%; /* Make input box responsive */
+        right: 5%; /* Center on smaller screens */
+        padding: 10px; /* Reduce padding for smaller screens */
+    }
+
+    .inputbox h1 {
+        font-size: 1.5em; /* Adjust font size for headings */
+    }
+
+    .button, .text-button {
+        font-size: 16px; /* Smaller font size for buttons */
+    }
+}
+
+@media (max-width: 480px) {
+    .headingdiv {
+        font-size: 3em; /* Further adjust for very small screens */
+    }
+
+    .dashes {
+        font-size: 2em; /* Further adjust dashes size */
+    }
+
+    .inputbox {
+        padding: 5px; /* Further reduce padding */
+    }
+
+    .inputbox h1 {
+        font-size: 1.2em; /* Further adjust heading size */
+    }
+
+    .button, .text-button {
+        font-size: 14px; /* Further reduce button font size */
+    }
+}

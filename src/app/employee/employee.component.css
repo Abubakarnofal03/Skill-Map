@@ -1,0 +1,425 @@
+/* Container styles */
+.body{
+    background-color: rgb(41, 25, 80) !important; /* Enforce color globally */
+    margin: 0; /* Reset margin for full viewport coverage */
+    overflow:visible; /* Prevent scrolling issues */
+}
+.mainbody {
+   
+    display: absolute;
+    justify-content: center;
+   
+    align-items: center;
+    height: 100vh; 
+    width: 100vw;   /* Full viewport width */
+    overflow:visible; /* Prevent any internal scrolling */
+    background-color: rgb(41, 25, 80);
+    /* height: 100vh; */
+}
+
+/* Sidebar navigation styles */
+.sidenavbar {
+    background-color: rgb(25, 15, 49);
+    height: 100%;
+    width: 35vh;
+    position: fixed; /* Fix sidebar position */
+    /* left: 10px; */
+    /* top: 10px; */
+    text-align: center;
+    padding-left: 5px;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+    /* z-index: 10;  */
+}
+
+/* Header text styles in sidebar */
+.sidenavbar h1 {
+    display: flex;
+    flex-direction: row; 
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+     gap: 8px;
+    position: absolute;
+    width: 150px;
+    height: 39px;
+    left: 49px;
+    top: 50px;
+    font-size: 35px;
+    font-weight: bold;
+    background: linear-gradient(to right, #B4CD93, #427A5B);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* Options div styles (Buttons container) */
+.optionsdiv {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    position: absolute;
+    width: 180px;
+    height: 233.02px;
+    left: 30px;
+    top: 180px;
+}
+
+/* Default Button Styles (Unselected) */
+.option-btn {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 8px 24px 8px 16px;
+    gap: 8px;
+    width: 150px;
+    height: 40px;
+    border-radius: 4px;
+    text-align: center;
+    background-color: transparent; 
+    font-weight: bold;
+    color: rgb(189, 142, 142); 
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover effect for unselected buttons */
+.option-btn:hover {
+    background-color: rgba(235, 206, 255, 0.3); /* Light hover effect */
+}
+
+
+.selected-option, .selected-option2 {
+    background: rgba(120, 197, 82, 0.59); /* Background when selected */
+    color: white; /* Text color when selected */
+    font-weight: bold;
+    border-radius: 4px;
+}
+
+/* Ensure selected state persists */
+.option-btn.selected-option, .option-btn2.selected-option2 {
+    background-color: rgba(120, 197, 82, 0.59); /* Ensure green background persists */
+    color: white;
+    font-weight: bold;
+}
+
+
+/* Options div styles (Buttons container) */
+.optionsdiv2 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    position: absolute;
+    width: 180px;
+    height: 133.02px; /* Adjusted height to fit 2 options */
+    left: 30px;
+    top: 380px;
+}
+
+/* Default Button Styles (Unselected) */
+.option-btn2 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 8px 24px 8px 16px;
+    gap: 8px;
+    width: 150px;
+    height: 40px;
+    border-radius: 4px;
+    text-align: center;
+    background-color: transparent; 
+    color: rgb(97, 93, 93); 
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover effect for unselected buttons */
+.option-btn2:hover {
+    background-color: rgba(120, 197, 82, 0.3); /* Light hover effect */
+}
+
+
+/* Special Logout Button Styles */
+.logout-btn {
+    color: red; /* Red color for Logout */
+}
+
+/* Optional: Hover effect for logout button */
+.logout-btn:hover {
+    background-color: rgba(255, 0, 0, 0.3); /* Light red hover effect */
+}
+
+
+.container {
+    margin-left: 35vh; /* Adjusted to match the width of the sidenavbar */
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #f2f2f2;
+    font-family: Arial, sans-serif;
+}
+
+  
+/* Header styles */
+header {
+    background-color: #35115f;
+    color: white;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 28px;
+}
+
+.employee-info {
+    display: flex;
+    gap: 20px;
+}
+
+.employee-info p {
+    margin: 0;
+    font-size: 14px;
+}
+  
+/* Content styles */
+.content {
+    flex-grow: 1;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 20px;
+    background-color: rgb(41, 25, 80);
+}
+  
+/* Stats styles */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 20px;
+}
+
+.active-projects, .completed-projects {
+    background-color: rgb(85, 12, 121);
+    padding: 20px;
+    text-align: center;
+    color: white;
+    border: solid rgb(161, 138, 138);
+    border-radius: 8px;
+}
+
+.active-projects h2, .completed-projects h2 {
+    margin-top: 0;
+    font-size: 32px;
+    color: #fff;
+}
+  
+/* Active tasks styles */
+.active-tasks {
+    grid-column: 1 / -1;
+    background-color: rgb(41, 25, 80);
+    padding: 20px;
+    color: white;
+    border: solid thin rgb(67, 46, 123);
+    border-radius: 8px;
+}
+
+.project-section {
+    margin-bottom: 20px;
+}
+
+.project-title {
+    color: #B4CD93;
+    border-bottom: 1px solid #427A5B;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+}
+
+.task {
+    background-color: rgb(67, 46, 123);
+    padding: 15px;
+    margin-bottom: 15px;
+    border: solid thin rgb(161, 138, 138);
+    border-radius: 6px;
+}
+
+.task-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.task-header h4 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.task-status {
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.task-status.pending {
+    background-color: #ffeeba;
+    color: #856404;
+}
+
+.task-status.in-progress {
+    background-color: #b8daff;
+    color: #004085;
+}
+
+.task-status.completed {
+    background-color: #c3e6cb;
+    color: #155724;
+}
+
+.task-description {
+    margin: 10px 0;
+    color: #B4CD93;
+    font-size: 14px;
+}
+
+.task-details {
+    display: flex;
+    gap: 20px;
+    font-size: 13px;
+    margin-bottom: 15px;
+}
+
+.task-details p {
+    margin: 0;
+}
+
+.task-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.complete-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.complete-btn:hover {
+    background-color: #45a049;
+}
+  
+/* Upcoming deadlines styles */
+.upcoming-deadlines {
+    background-color: rgb(41, 25, 80);
+    padding: 20px;
+    color: white;
+    border: solid thin rgb(67, 46, 123);
+    border-radius: 8px;
+}
+
+.deadline {
+    background-color: rgb(67, 46, 123);
+    padding: 15px;
+    margin-bottom: 15px;
+    border: solid thin rgb(161, 138, 138);
+    border-radius: 6px;
+}
+
+.deadline-info h4 {
+    margin: 0 0 5px;
+    font-size: 16px;
+}
+
+.deadline-info p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #B4CD93;
+}
+
+.deadline-date {
+    color: #ff6b6b !important;
+    font-weight: 500;
+}
+  
+/* User status styles */
+.user-status {
+    background-color: rgb(41, 25, 80);
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    font-weight: bolder;
+}
+
+.user-status p {
+    margin: 0;
+}
+
+.user-status button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.user-status button:hover {
+    background-color: #45a049;
+}
+
+.user-status button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+/* No data message */
+.no-data {
+    text-align: center;
+    padding: 20px;
+    color: #B4CD93;
+    font-style: italic;
+}
+
+/* Loading overlay */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(25, 15, 49, 0.8);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    color: white;
+}
+
+.spinner {
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top: 4px solid #B4CD93;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
