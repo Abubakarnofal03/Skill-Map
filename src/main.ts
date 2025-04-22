@@ -6,4 +6,7 @@ platformBrowserDynamic().bootstrapModule(AppModule, {
   ngZoneEventCoalescing: true
 })
   .catch(err => console.error(err));
-  // localStorage.setItem('isAuthenticated','false');
+// Comment out direct localStorage access
+// if (typeof window !== 'undefined') {
+//   localStorage.setItem('isAuthenticated','false');
+// }

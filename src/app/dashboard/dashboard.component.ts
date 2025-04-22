@@ -3,6 +3,12 @@ import { EmployeeService } from '../services/employee.service';
 import { ProjectService } from '../services/project.service';
 import { Router } from '@angular/router';
 
+interface Employee {
+  id: number;
+  username: string;
+  // Add other employee properties as needed
+}
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -34,12 +40,12 @@ export class DashboardComponent implements OnInit {
 
   getEmployees(): void {
     this.employeeService.getAllEmployees().subscribe(
-      (data) => {
+      (data: Employee[]) => {
         this.employees = data;
         this.filteredEmployees = data;
         this.totalEmployees = data.length;
       },
-      (error) => {
+      (error: Error) => {
         console.error('Error fetching employees:', error);
       }
     );

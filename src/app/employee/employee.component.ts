@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { EmployeeService } from '../services/employee.service';
+import { LocalStorageService } from '../services/local-storage.service';
+import { HttpHeaders } from '@angular/common/http';
 
 interface Task {
   id: number;
@@ -41,12 +43,13 @@ export class EmployeeComponent implements OnInit {
 
   constructor(
     private router: Router, 
-    private employeeService: EmployeeService
+    private employeeService: EmployeeService,
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit(): void {
     // Check if user is authenticated
-    const isAuthenticated = localStorage.getItem('isAuthenticated');
+    const isAuthenticated = this.localStorageService.getItem('isAuthenticated');
     if (!isAuthenticated) {
       this.router.navigate(['/login']);
       return;
@@ -70,180 +73,129 @@ export class EmployeeComponent implements OnInit {
   }
 
   logout(): void {
-    localStorage.removeItem('isAuthenticated');
+    this.localStorageService.removeItem('isAuthenticated');
     this.router.navigate(['/login']);
   }
 
-  // Function to fetch employee details from the backend
-  getEmployeeDetails(): void {
-    this.employeeService.getEmployeeDetails().subscribe({
-      next: (response) => {
-        console.log('Employee details response:', response);
-        if (response) {
-          // Handle different response formats
-          this.employeeName = response.name || response.username || localStorage.getItem('username') || 'Employee';
-          this.employeeSkill = response.skill || '';
-          this.employeeStatus = response.status || 'Active';
-        }
-      },
-      error: (error) => {
-        console.error('Error fetching employee details:', error);
-        // Use username from localStorage as fallback
-        this.employeeName = localStorage.getItem('username') || 'Employee';
-      }
-    });
-  }
-
-  // Function to fetch tasks assigned to the employee
-  getEmployeeTasks(): void {
-    this.isLoading = true;
-    this.employeeService.getEmployeeTasks().subscribe({
-      next: (response) => {
-        console.log('Employee tasks response:', response);
-        if (response && response.projects) {
-          this.projectsWithTasks = response.projects;
-          
-          // Process tasks as before
-          this.activeTasksCount = 0;
-          this.completedTasksCount = 0;
-          let allTasks: Task[] = [];
-          
-          this.projectsWithTasks.forEach(project => {
-            project.tasks.forEach(task => {
-              allTasks.push(task);
-              if (task.status === 'Completed') {
-                this.completedTasksCount++;
-              } else {
-                this.activeTasksCount++;
-              }
-            });
-          });
-          
-          this.upcomingDeadlines = [...allTasks]
-            .filter(task => task.status !== 'Completed' && task.duedate)
-            .sort((a, b) => {
-              const dateA = a.duedate ? new Date(a.duedate).getTime() : 0;
-              const dateB = b.duedate ? new Date(b.duedate).getTime() : 0;
-              return dateA - dateB;
-            })
-            .slice(0, 3);
-        } else {
-          // Reset values if no data
-          this.projectsWithTasks = [];
-          this.activeTasksCount = 0;
-          this.completedTasksCount = 0;
-          this.upcomingDeadlines = [];
-        }
-        this.isLoading = false;
-      },
-      error: (error) => {
-        console.error('Error fetching employee tasks:', error);
-        this.isLoading = false;
-        // Reset values on error
-        this.projectsWithTasks = [];
-        this.activeTasksCount = 0;
-        this.completedTasksCount = 0;
-        this.upcomingDeadlines = [];
-      }
-    });
-  }
-
-  // Function to update task status
-  // Update the updateTaskStatus method
-  updateTaskStatus(taskId: number, status: string): void {
-    this.isUpdating = true;
-    
-    this.employeeService.updateTaskStatus(taskId, status)
-      .subscribe({
-        next: (response) => {
-          console.log('Task updated successfully:', response);
-          
-          // Update the task in the local array
-          this.projectsWithTasks.forEach(project => {
-            project.tasks.forEach(task => {
-              if (task.id === taskId) {
-                task.status = status;
-              }
-            });
-          });
-          
-          // Update counts
-          this.updateTaskCounts();
-          this.isUpdating = false;
-        },
-        error: (error) => {
-          console.error('Error updating task:', error);
-          alert('Failed to update task status. Please try again.');
-          this.isUpdating = false;
-        }
-      });
-  }
-
-  // Add this method to recalculate task counts
-  updateTaskCounts(): void {
-    this.activeTasksCount = 0;
-    this.completedTasksCount = 0;
-    let allTasks: Task[] = [];
-    
-    this.projectsWithTasks.forEach(project => {
-      project.tasks.forEach(task => {
-        allTasks.push(task);
-        if (task.status === 'Completed') {
-          this.completedTasksCount++;
-        } else {
-          this.activeTasksCount++;
-        }
-      });
-    });
-    
-    // Update upcoming deadlines
-    this.upcomingDeadlines = [...allTasks]
-      .filter(task => task.status !== 'Completed' && task.duedate)
-      .sort((a, b) => {
-        const dateA = a.duedate ? new Date(a.duedate).getTime() : 0;
-        const dateB = b.duedate ? new Date(b.duedate).getTime() : 0;
-        return dateA - dateB;
-      })
-      .slice(0, 3);
-  }
-
-  // Helper function to format date
-  formatDate(dateString: string): string {
-    if (!dateString) return 'No date';
-    const date = new Date(dateString);
-    return date.toLocaleDateString();
-  }
-
-  // Extract task type from description
-  // Update the getTaskType method to handle both description and tasktype
-  getTaskType(description: string, tasktype: string | null): string {
-    if (tasktype) {
-      return tasktype;
-    }
-    
-    // Fallback to extracting from description if tasktype is null
-    const match = description.match(/Category: (.*)/);
-    return match ? match[1] : 'General';
-  }
-
-  // Apply for leave functionality
-  applyForLeave(): void {
-    if (this.employeeStatus === 'on_leave') {
-      alert('You are already on leave');
-      return;
-    }
-    
-    if (confirm('Are you sure you want to apply for leave?')) {
-      this.employeeService.applyForLeave().subscribe(
-        (response) => {
-          alert('Leave application submitted successfully');
-          this.employeeStatus = 'on_leave';
+  private getEmployeeDetails(): void {
+    const username = this.localStorageService.getItem('username');
+    if (username) {
+      this.employeeName = username;
+      
+      // Get employee details from service
+      this.employeeService.getEmployeeDetails().subscribe(
+        (data) => {
+          if (data) {
+            this.employeeSkill = data.skill || '';
+            this.employeeStatus = data.status || 'Active';
+          }
         },
         (error) => {
-          console.error('Error applying for leave:', error);
-          alert('Failed to apply for leave. Please try again.');
+          console.error('Error fetching employee details:', error);
         }
       );
     }
+  }
+
+  private getEmployeeTasks(): void {
+    this.isLoading = true;
+    
+    this.employeeService.getEmployeeTasks().subscribe(
+      (response) => {
+        this.projectsWithTasks = response.projects || [];
+        this.calculateTaskMetrics();
+        this.isLoading = false;
+      },
+      (error) => {
+        console.error('Error fetching employee tasks:', error);
+        this.isLoading = false;
+      }
+    );
+  }
+
+  private calculateTaskMetrics(): void {
+    this.activeTasksCount = 0;
+    this.completedTasksCount = 0;
+    this.upcomingDeadlines = [];
+    
+    const today = new Date();
+    const oneWeekLater = new Date();
+    oneWeekLater.setDate(today.getDate() + 7);
+    
+    this.projectsWithTasks.forEach(project => {
+      project.tasks.forEach(task => {
+        // Count active and completed tasks
+        if (task.status === 'In Progress' || task.status === 'Pending') {
+          this.activeTasksCount++;
+        } else if (task.status === 'Completed') {
+          this.completedTasksCount++;
+        }
+        
+        // Check for upcoming deadlines (within a week)
+        const dueDate = new Date(task.duedate);
+        if (dueDate >= today && dueDate <= oneWeekLater && task.status !== 'Completed') {
+          this.upcomingDeadlines.push(task);
+        }
+      });
+    });
+    
+    // Sort upcoming deadlines by due date
+    this.upcomingDeadlines.sort((a, b) => {
+      return new Date(a.duedate).getTime() - new Date(b.duedate).getTime();
+    });
+  }
+
+  updateTaskStatus(taskId: number, newStatus: string): void {
+    this.isUpdating = true;
+    
+    this.employeeService.updateTaskStatus(taskId, newStatus).subscribe(
+      (response) => {
+        // Update the task status in the local data
+        this.projectsWithTasks.forEach(project => {
+          const task = project.tasks.find(t => t.id === taskId);
+          if (task) {
+            task.status = newStatus;
+          }
+        });
+        
+        this.calculateTaskMetrics();
+        this.isUpdating = false;
+      },
+      (error) => {
+        console.error('Error updating task status:', error);
+        this.isUpdating = false;
+      }
+    );
+  }
+
+  getTaskStatusClass(status: string): string {
+    switch (status.toLowerCase()) {
+      case 'completed':
+        return 'status-completed';
+      case 'in progress':
+        return 'status-in-progress';
+      case 'pending':
+        return 'status-pending';
+      default:
+        return '';
+    }
+  }
+
+  formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'short', 
+      day: 'numeric' 
+    });
+  }
+
+  getTaskType(description: string, tasktype: string | null): string {
+    return tasktype || description;  // Return tasktype if available, otherwise description
+  }
+
+  applyForLeave(): void {
+    // Implement leave application logic here
+    console.log('Leave application functionality to be implemented');
   }
 }
