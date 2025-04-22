@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { EmployeeService } from '../services/employee.service';
-import { LocalStorageService } from '../services/local-storage.service';
-import { HttpHeaders } from '@angular/common/http';
 
 interface Task {
   id: number;
@@ -38,21 +37,23 @@ export class EmployeeComponent implements OnInit {
   upcomingDeadlines: Task[] = [];
   
   // For task status update
+  loginError: string = '';
   isUpdating: boolean = false;
   isLoading: boolean = true;
 
   constructor(
     private router: Router, 
     private employeeService: EmployeeService,
-    private localStorageService: LocalStorageService
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   ngOnInit(): void {
-    // Check if user is authenticated
-    const isAuthenticated = this.localStorageService.getItem('isAuthenticated');
-    if (!isAuthenticated) {
-      this.router.navigate(['/login']);
-      return;
+    if (isPlatformBrowser(this.platformId)) {
+      const isAuthenticated = localStorage.getItem('isAuthenticated');
+      if (!isAuthenticated) {
+        this.router.navigate(['/login']);
+        return;
+      }
     }
     
     this.getEmployeeDetails();
@@ -73,129 +74,114 @@ export class EmployeeComponent implements OnInit {
   }
 
   logout(): void {
-    this.localStorageService.removeItem('isAuthenticated');
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem('isAuthenticated');
+    }
     this.router.navigate(['/login']);
   }
 
-  private getEmployeeDetails(): void {
-    const username = this.localStorageService.getItem('username');
-    if (username) {
-      this.employeeName = username;
-      
-      // Get employee details from service
-      this.employeeService.getEmployeeDetails().subscribe(
-        (data) => {
-          if (data) {
-            this.employeeSkill = data.skill || '';
-            this.employeeStatus = data.status || 'Active';
-          }
-        },
-        (error) => {
-          console.error('Error fetching employee details:', error);
+  getEmployeeDetails(): void {
+    this.employeeService.getEmployeeDetails().subscribe({
+      next: (response) => {
+        if (response) {
+          this.employeeName = response.name || response.username || 
+            (isPlatformBrowser(this.platformId) ? localStorage.getItem('username') : null) || 
+            'Employee';
+          this.employeeSkill = response.skill || '';
+          this.employeeStatus = response.status || 'Active';
         }
-      );
-    }
+      },
+      error: (error) => {
+        console.error('Error fetching employee details:', error);
+        if (isPlatformBrowser(this.platformId)) {
+          this.employeeName = localStorage.getItem('username') || 'Employee';
+        } else {
+          this.employeeName = 'Employee';
+        }
+      }
+    });
   }
 
-  private getEmployeeTasks(): void {
+  getEmployeeTasks(): void {
     this.isLoading = true;
-    
-    this.employeeService.getEmployeeTasks().subscribe(
-      (response) => {
-        this.projectsWithTasks = response.projects || [];
-        this.calculateTaskMetrics();
+    this.employeeService.getEmployeeTasks().subscribe({
+      next: (response) => {
+        if (response && response.projects) {
+          this.projectsWithTasks = response.projects;
+          
+          // Process tasks
+          this.activeTasksCount = 0;
+          this.completedTasksCount = 0;
+          let allTasks: Task[] = [];
+          
+          this.projectsWithTasks.forEach(project => {
+            project.tasks.forEach(task => {
+              allTasks.push(task);
+              if (task.status === 'Completed') {
+                this.completedTasksCount++;
+              } else {
+                this.activeTasksCount++;
+              }
+            });
+          });
+          
+          // Get upcoming deadlines
+          this.upcomingDeadlines = [...allTasks]
+            .filter(task => task.status !== 'Completed' && task.duedate)
+            .sort((a, b) => {
+              const dateA = a.duedate ? new Date(a.duedate).getTime() : 0;
+              const dateB = b.duedate ? new Date(b.duedate).getTime() : 0;
+              return dateA - dateB;
+            })
+            .slice(0, 3);
+        } else {
+          // Reset values if no data
+          this.projectsWithTasks = [];
+          this.activeTasksCount = 0;
+          this.completedTasksCount = 0;
+          this.upcomingDeadlines = [];
+        }
         this.isLoading = false;
       },
-      (error) => {
+      error: (error) => {
         console.error('Error fetching employee tasks:', error);
         this.isLoading = false;
+        // Reset values on error
+        this.projectsWithTasks = [];
+        this.activeTasksCount = 0;
+        this.completedTasksCount = 0;
+        this.upcomingDeadlines = [];
       }
-    );
-  }
-
-  private calculateTaskMetrics(): void {
-    this.activeTasksCount = 0;
-    this.completedTasksCount = 0;
-    this.upcomingDeadlines = [];
-    
-    const today = new Date();
-    const oneWeekLater = new Date();
-    oneWeekLater.setDate(today.getDate() + 7);
-    
-    this.projectsWithTasks.forEach(project => {
-      project.tasks.forEach(task => {
-        // Count active and completed tasks
-        if (task.status === 'In Progress' || task.status === 'Pending') {
-          this.activeTasksCount++;
-        } else if (task.status === 'Completed') {
-          this.completedTasksCount++;
-        }
-        
-        // Check for upcoming deadlines (within a week)
-        const dueDate = new Date(task.duedate);
-        if (dueDate >= today && dueDate <= oneWeekLater && task.status !== 'Completed') {
-          this.upcomingDeadlines.push(task);
-        }
-      });
-    });
-    
-    // Sort upcoming deadlines by due date
-    this.upcomingDeadlines.sort((a, b) => {
-      return new Date(a.duedate).getTime() - new Date(b.duedate).getTime();
     });
   }
 
-  updateTaskStatus(taskId: number, newStatus: string): void {
+  getTaskType(description: string, taskType: string | null): string {
+    return taskType || 'General Task';
+  }
+
+  formatDate(date: string): string {
+    if (!date) return 'No due date';
+    return new Date(date).toLocaleDateString();
+  }
+
+  updateTaskStatus(taskId: number, status: string): void {
+    if (this.isUpdating) return;
     this.isUpdating = true;
-    
-    this.employeeService.updateTaskStatus(taskId, newStatus).subscribe(
-      (response) => {
-        // Update the task status in the local data
-        this.projectsWithTasks.forEach(project => {
-          const task = project.tasks.find(t => t.id === taskId);
-          if (task) {
-            task.status = newStatus;
-          }
-        });
-        
-        this.calculateTaskMetrics();
+
+    this.employeeService.updateTaskStatus(taskId, status).subscribe({
+      next: () => {
+        this.getEmployeeTasks();
         this.isUpdating = false;
       },
-      (error) => {
+      error: (error) => {
         console.error('Error updating task status:', error);
         this.isUpdating = false;
       }
-    );
-  }
-
-  getTaskStatusClass(status: string): string {
-    switch (status.toLowerCase()) {
-      case 'completed':
-        return 'status-completed';
-      case 'in progress':
-        return 'status-in-progress';
-      case 'pending':
-        return 'status-pending';
-      default:
-        return '';
-    }
-  }
-
-  formatDate(dateString: string): string {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric' 
     });
   }
 
-  getTaskType(description: string, tasktype: string | null): string {
-    return tasktype || description;  // Return tasktype if available, otherwise description
-  }
-
   applyForLeave(): void {
-    // Implement leave application logic here
-    console.log('Leave application functionality to be implemented');
+    // Implement leave application logic
+    alert('Leave application feature coming soon!');
   }
 }

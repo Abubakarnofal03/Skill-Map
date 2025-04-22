@@ -1,5 +1,6 @@
 // theme.service.ts
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
@@ -7,12 +8,16 @@ import { Injectable } from '@angular/core';
 export class ThemeService {
   private darkModeEnabled = false;
 
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+
   toggleDarkMode(): void {
     this.darkModeEnabled = !this.darkModeEnabled;
-    if (this.darkModeEnabled) {
-      document.body.classList.add('dark-mode');
-    } else {
-      document.body.classList.remove('dark-mode');
+    if (isPlatformBrowser(this.platformId)) {
+      if (this.darkModeEnabled) {
+        document.body.classList.add('dark-mode');
+      } else {
+        document.body.classList.remove('dark-mode');
+      }
     }
   }
 

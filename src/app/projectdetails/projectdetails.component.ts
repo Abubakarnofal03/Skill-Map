@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PD } from '../model/PD.model';
 import { HttpClient } from '@angular/common/http';
+import { BrowserStorageService } from '../services/browser-storage.service';
 
 @Component({
   selector: 'app-projectdetails',
@@ -13,10 +14,13 @@ export class ProjectdetailsComponent implements OnInit {
   project: PD;
   isLoading: boolean = false;
   loadingMessage: string = 'Preparing your project details...';
+  segregationDone: boolean = false;
 
-  segregationDone: boolean = false; // ✅ Added flag to prevent multiple clicks
-
-  constructor(private router: Router, private http: HttpClient) {
+  constructor(
+    private router: Router, 
+    private http: HttpClient,
+    private browserStorage: BrowserStorageService
+  ) {
     const navigation = this.router.getCurrentNavigation();
     this.project = navigation?.extras.state?.['project'];
   }
@@ -76,7 +80,7 @@ export class ProjectdetailsComponent implements OnInit {
   }
 
   logout(): void {
-    localStorage.removeItem('isAuthenticated');
+    this.browserStorage.removeItem('isAuthenticated');
     this.router.navigate(['/login2']);
   }
 }

@@ -13,7 +13,7 @@ import { TeamsComponent } from './teams/teams.component';
 import { DashboardComponent } from './dashboard/dashboard.component';  
 import { HttpClientModule, provideHttpClient, withFetch } from '@angular/common/http';
 import { EmployeeComponent } from './employee/employee.component';
-import { LocalStorageService } from './services/local-storage.service';
+import { BrowserStorageService } from './services/browser-storage.service';
 
 @NgModule({
   declarations: [
@@ -35,9 +35,8 @@ import { LocalStorageService } from './services/local-storage.service';
     
   ],
   providers: [
-    // Use the 'withFetch' method to enable the fetch API
-    provideHttpClient(withFetch()),
-    LocalStorageService
+    BrowserStorageService,
+    provideHttpClient(withFetch())
   ],
   bootstrap: [AppComponent]
 })

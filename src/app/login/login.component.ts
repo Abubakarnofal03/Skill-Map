@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { BrowserStorageService } from '../services/browser-storage.service';
 
 @Component({
   selector: 'app-login',
@@ -7,17 +8,16 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  constructor(private router: Router) {
-    // Clear any existing authentication on login page load
-    localStorage.removeItem('isAuthenticated');
-    localStorage.removeItem('authToken');
+  constructor(
+    private router: Router,
+    private browserStorage: BrowserStorageService
+  ) {
+    this.browserStorage.removeItem('isAuthenticated');
+    this.browserStorage.removeItem('authToken');
   }
 
-  // Store the selected role in localStorage and navigate to the login2 page
   setRole(role: string) {
-    // Save the role to localStorage
-    localStorage.setItem('userRole', role);
-    // Navigate to the login2 component with the role as a query parameter
+    this.browserStorage.setItem('userRole', role);
     this.router.navigate(['/login2'], { queryParams: { role } });
   }
 }

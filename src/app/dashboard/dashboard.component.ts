@@ -1,13 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { EmployeeService } from '../services/employee.service';
 import { ProjectService } from '../services/project.service';
 import { Router } from '@angular/router';
-
-interface Employee {
-  id: number;
-  username: string;
-  // Add other employee properties as needed
-}
+import { BrowserStorageService } from '../services/browser-storage.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -30,7 +26,8 @@ export class DashboardComponent implements OnInit {
   constructor(
     private router: Router,
     private employeeService: EmployeeService,
-    private projectService: ProjectService
+    private projectService: ProjectService,
+    private browserStorage: BrowserStorageService
   ) {}
 
   ngOnInit(): void {
@@ -40,12 +37,12 @@ export class DashboardComponent implements OnInit {
 
   getEmployees(): void {
     this.employeeService.getAllEmployees().subscribe(
-      (data: Employee[]) => {
+      (data) => {
         this.employees = data;
         this.filteredEmployees = data;
         this.totalEmployees = data.length;
       },
-      (error: Error) => {
+      (error) => {
         console.error('Error fetching employees:', error);
       }
     );
@@ -78,7 +75,7 @@ export class DashboardComponent implements OnInit {
   }
 
   logout(): void {
-    localStorage.removeItem('isAuthenticated');
+    this.browserStorage.removeItem('isAuthenticated');
     this.router.navigate(['/login2']);
   }
 }
